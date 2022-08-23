@@ -16,7 +16,7 @@ pub const SPL_NAME_SERVICE_ID: [u8; 32] = [
 
 pub const ERROR_URL: &str = "https://sol-domain.org";
 
-pub const HOME_MSG: &str = "Visit https://bonfida.org";
+// pub const HOME_MSG: &str = "Visit https://bonfida.org";
 
 pub const RECORDS_LOWER_CASE: [&str; 14] = [
     "ipfs", "arwv", "eth", "btc", "ltc", "doge", "email", "url", "discord", "github", "reddit",
@@ -27,3 +27,5 @@ pub const RECORDS: [&str; 14] = [
     "IPFS", "ARWV", "ETH", "BTC", "LTC", "DOGE", "email", "url", "discord", "github", "reddit",
     "twitter", "telegram", "SHDW",
 ];
+
+pub const GATEWAY_DOMAIN: &str = ".4sol.xyz";

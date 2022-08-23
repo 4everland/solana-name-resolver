@@ -46,19 +46,21 @@ pub async fn get_name_url(sns_name: &str) -> anyhow::Result<Url> {
             let ipfs_record = find_name_key("\x01IPFS", &domain_key);
             let arwv_record = find_name_key("\x01ARWV", &domain_key);
             let shdw_record = find_name_key("\x01SHDW", &domain_key);
-            
+
             let res_tuple = join!(
                 fetch_record(&url_record),
                 fetch_record(&ipfs_record),
                 fetch_record(&arwv_record),
-                fetch_record(&shdw_record)
+                fetch_record(&shdw_record),
+                fetch_record(&domain_key)
             );
 
             let res = res_tuple
                 .0
                 .map_or(res_tuple.1, Ok)
                 .map_or(res_tuple.2, Ok)
-                .map_or(res_tuple.3, Ok);
+                .map_or(res_tuple.3, Ok)
+                .map_or(res_tuple.4, Ok);
 
             res?
         }
@@ -70,7 +72,7 @@ pub async fn get_name_url(sns_name: &str) -> anyhow::Result<Url> {
 
     if result.starts_with("ipfs://") {
         let cid = &result[7..];
-        result = format!("https://cloudflare-ipfs.com/ipfs/{}", cid);
+        result = format!("https://4everland.io/ipfs/{}", cid);
     }
 
     if result.starts_with("arwv://") {
@@ -81,6 +83,21 @@ pub async fn get_name_url(sns_name: &str) -> anyhow::Result<Url> {
     if result.starts_with("shdw://") {
         let shdw_address = &result[7..];
         result = format!("https://shdw-drive.genesysgo.net/{}", shdw_address);
+    }
+
+    if result.starts_with("ipns://") {
+        let cid = &result[7..];
+        result = format!("https://4everland.io/ipns/{}", cid);
+    }
+
+    if result.starts_with("ipfs=") {
+        let cid = &result[5..];
+        result = format!("https://4everland.io/ipfs/{}", cid);
+    }
+
+    if result.starts_with("ipns=") {
+        let cid = &result[5..];
+        result = format!("https://4everland.io/ipns/{}", cid);
     }
 
     Url::parse(&result).map_err(|_| anyhow!("Error parsing URL"))
